@@ -1,0 +1,42 @@
+name: Firmware and native contracts
+on: [push, pull_request]
+jobs:
+  native:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build host logic with sanitizers
+        run: |
+          cmake -S tests -B build-host -DENABLE_SANITIZERS=ON
+          cmake --build build-host --parallel 2
+          ctest --test-dir build-host --output-on-failure
+  esp32:
+    runs-on: ubuntu-latest
+    container: espressif/idf:v5.4.2
+    strategy:
+      matrix:
+        profile: [offline, mqtt]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Compile ESP32 firmware
+        shell: bash
+        env:
+          IDF_COMPONENT_MANAGER: "0"
+          PROFILE: ${{ matrix.profile }}
+        run: |
+          . "$IDF_PATH/export.sh"
+          if [ "$PROFILE" = mqtt ]; then
+            idf.py -D SDKCONFIG_DEFAULTS='sdkconfig.defaults;sdkconfig.mqtt.defaults' build
+          else
+            idf.py build
+          fi
+      - uses: actions/upload-artifact@v4
+        with:
+          name: IndustrialRTOS-${{ matrix.profile }}
+          path: |
+            build/IndustrialRTOS.bin
+            build/IndustrialRTOS.elf
+            build/bootloader/bootloader.bin
+            build/partition_table/partition-table.bin
+            build/flasher_args.json
+            build/flash_args

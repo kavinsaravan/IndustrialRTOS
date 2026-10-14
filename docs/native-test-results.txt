@@ -1,0 +1,37 @@
+PASS boot waits for valid initialization
+PASS failed sensor initialization inhibits motor
+PASS normal conditions and fan hysteresis
+PASS warning threshold is inclusive
+PASS critical temperature disables motor
+PASS vibration threshold disables motor
+PASS invalid and non-finite readings fail closed
+PASS freshness boundary and timeout
+PASS no samples at boot times out
+PASS future sample timestamp fails closed
+PASS warning hysteresis clears strictly below 62
+PASS unsafe acknowledgment never restarts
+PASS premature safe acknowledgment is not remembered
+PASS recovery requires dwell and a new acknowledgment
+PASS ack at exact ready transition is rejected
+PASS unsafe interval resets recovery dwell
+PASS recovery ready revokes on unsafe measurement
+PASS missed heartbeat and deadline are safety interlocks
+PASS simultaneous faults preserved with deterministic priority
+PASS latched fault mask accumulates until acknowledged
+PASS button bounce and held button generate only one press
+PASS boot-held button requires release and new press
+PASS diagnostic heartbeat timeout trips controller
+PASS control deadline supervision is independent of controller
+PASS diagnostic startup grace is bounded
+PASS queue overflow counters count failed sends only
+PASS deadline and jitter counters reflect late beats
+PASS MQTT disconnect leaves normal and fault control operational
+PASS telemetry heartbeat loss is advisory, critical tasks still monitored
+PASS bounded reconnect doubles to 30 seconds and resets
+PASS JSON formatter rejects truncated messages
+PASS invalid measurements serialize as JSON null
+PASS critical transient stays latched after newer safe reading
+PASS recovery does not progress using an indefinitely stale safe sample
+PASS motor interlock invariant over deterministic mixed inputs
+35 tests passed
+Validated 18 JSON frames and offline fault/recovery walkthrough

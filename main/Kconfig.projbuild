@@ -1,0 +1,23 @@
+menu "IndustrialRTOS"
+config INDUSTRIAL_DEMO_STALL
+    bool "Enable deliberate control-task stall injection on GPIO33"
+    default n
+    help
+        Demo only. Ground GPIO33 to delay the control task by 1 second.
+        The independent diagnostics task must inhibit the motor output.
+config INDUSTRIAL_MQTT
+    bool "Enable optional Wokwi Wi-Fi and MQTT telemetry"
+    default n
+config INDUSTRIAL_MQTT_URI
+    string "MQTT broker URI (non-secret demo endpoint)"
+    depends on INDUSTRIAL_MQTT
+    default "mqtt://test.mosquitto.org:1883"
+config INDUSTRIAL_MQTT_CLIENT_ID
+    string "MQTT client ID (choose a unique non-secret ID)"
+    depends on INDUSTRIAL_MQTT
+    default "industrialrtos-demo"
+config INDUSTRIAL_MQTT_TOPIC
+    string "MQTT topic (choose a unique non-secret suffix)"
+    depends on INDUSTRIAL_MQTT
+    default "industrialrtos/demo/status"
+endmenu

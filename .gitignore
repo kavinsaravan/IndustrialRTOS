@@ -1,0 +1,12 @@
+build/
+build-host*/
+sdkconfig
+sdkconfig.old
+sdkconfig.local
+managed_components/
+dependencies.lock
+.vscode/
+.DS_Store
+*.log
+build-*/
+dist/

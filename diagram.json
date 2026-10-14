@@ -1,0 +1,318 @@
+{
+  "version": 1,
+  "author": "IndustrialRTOS",
+  "editor": "wokwi",
+  "parts": [
+    {
+      "type": "board-esp32-devkit-c-v4",
+      "id": "esp",
+      "top": 0,
+      "left": 0,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-potentiometer",
+      "id": "temp",
+      "top": -40,
+      "left": -240,
+      "attrs": {
+        "value": "256"
+      }
+    },
+    {
+      "type": "wokwi-potentiometer",
+      "id": "vib",
+      "top": 100,
+      "left": -240,
+      "attrs": {
+        "value": "100"
+      }
+    },
+    {
+      "type": "wokwi-pushbutton",
+      "id": "ack",
+      "top": 220,
+      "left": -200,
+      "attrs": {
+        "color": "blue",
+        "label": "ACK"
+      }
+    },
+    {
+      "type": "wokwi-slide-switch",
+      "id": "invalid",
+      "top": 270,
+      "left": 0,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-slide-switch",
+      "id": "timeout",
+      "top": 270,
+      "left": 120,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-led",
+      "id": "motor",
+      "top": 20,
+      "left": 270,
+      "attrs": {
+        "color": "green",
+        "label": "MOTOR"
+      }
+    },
+    {
+      "type": "wokwi-resistor",
+      "id": "rmotor",
+      "top": 20,
+      "left": 190,
+      "attrs": {
+        "value": "220"
+      }
+    },
+    {
+      "type": "wokwi-led",
+      "id": "fan",
+      "top": 90,
+      "left": 270,
+      "attrs": {
+        "color": "blue",
+        "label": "FAN"
+      }
+    },
+    {
+      "type": "wokwi-resistor",
+      "id": "rfan",
+      "top": 90,
+      "left": 190,
+      "attrs": {
+        "value": "220"
+      }
+    },
+    {
+      "type": "wokwi-led",
+      "id": "alarm",
+      "top": 160,
+      "left": 270,
+      "attrs": {
+        "color": "red",
+        "label": "ALARM"
+      }
+    },
+    {
+      "type": "wokwi-resistor",
+      "id": "ralarm",
+      "top": 160,
+      "left": 190,
+      "attrs": {
+        "value": "220"
+      }
+    },
+    {
+      "type": "wokwi-text",
+      "id": "tlabel",
+      "top": -80,
+      "left": -250,
+      "attrs": {
+        "text": "TEMPERATURE 20\u2013100 C"
+      }
+    },
+    {
+      "type": "wokwi-text",
+      "id": "vlabel",
+      "top": 65,
+      "left": -250,
+      "attrs": {
+        "text": "VIBRATION 0\u201310 demo units"
+      }
+    },
+    {
+      "type": "wokwi-text",
+      "id": "ilabel",
+      "top": 310,
+      "left": -10,
+      "attrs": {
+        "text": "INVALID SAMPLE"
+      }
+    },
+    {
+      "type": "wokwi-text",
+      "id": "slabel",
+      "top": 310,
+      "left": 120,
+      "attrs": {
+        "text": "STOP SAMPLES"
+      }
+    },
+    {
+      "type": "wokwi-slide-switch",
+      "id": "stall",
+      "top": 270,
+      "left": 260,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-text",
+      "id": "stalllabel",
+      "top": 310,
+      "left": 260,
+      "attrs": {
+        "text": "CONTROL STALL (demo option)"
+      }
+    }
+  ],
+  "connections": [
+    [
+      "esp:TX",
+      "$serialMonitor:RX",
+      "",
+      []
+    ],
+    [
+      "esp:RX",
+      "$serialMonitor:TX",
+      "",
+      []
+    ],
+    [
+      "temp:SIG",
+      "esp:34",
+      "green",
+      []
+    ],
+    [
+      "vib:SIG",
+      "esp:35",
+      "green",
+      []
+    ],
+    [
+      "ack:1.l",
+      "esp:25",
+      "blue",
+      []
+    ],
+    [
+      "ack:2.l",
+      "esp:GND.1",
+      "black",
+      []
+    ],
+    [
+      "invalid:2",
+      "esp:26",
+      "orange",
+      []
+    ],
+    [
+      "invalid:3",
+      "esp:GND.1",
+      "black",
+      []
+    ],
+    [
+      "timeout:2",
+      "esp:27",
+      "orange",
+      []
+    ],
+    [
+      "timeout:3",
+      "esp:GND.1",
+      "black",
+      []
+    ],
+    [
+      "temp:VCC",
+      "esp:3V3",
+      "red",
+      []
+    ],
+    [
+      "temp:GND",
+      "esp:GND.1",
+      "black",
+      []
+    ],
+    [
+      "vib:VCC",
+      "esp:3V3",
+      "red",
+      []
+    ],
+    [
+      "vib:GND",
+      "esp:GND.1",
+      "black",
+      []
+    ],
+    [
+      "esp:18",
+      "rmotor:1",
+      "green",
+      []
+    ],
+    [
+      "rmotor:2",
+      "motor:A",
+      "green",
+      []
+    ],
+    [
+      "motor:C",
+      "esp:GND.1",
+      "black",
+      []
+    ],
+    [
+      "esp:19",
+      "rfan:1",
+      "blue",
+      []
+    ],
+    [
+      "rfan:2",
+      "fan:A",
+      "blue",
+      []
+    ],
+    [
+      "fan:C",
+      "esp:GND.1",
+      "black",
+      []
+    ],
+    [
+      "esp:23",
+      "ralarm:1",
+      "red",
+      []
+    ],
+    [
+      "ralarm:2",
+      "alarm:A",
+      "red",
+      []
+    ],
+    [
+      "alarm:C",
+      "esp:GND.1",
+      "black",
+      []
+    ],
+    [
+      "stall:2",
+      "esp:33",
+      "orange",
+      []
+    ],
+    [
+      "stall:3",
+      "esp:GND.1",
+      "black",
+      []
+    ]
+  ],
+  "dependencies": {}
+}
