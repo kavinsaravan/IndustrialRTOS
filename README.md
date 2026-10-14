@@ -1,7 +1,7 @@
 # IndustrialRTOS
 
 **A simulated industrial equipment controller built with C++, ESP-IDF and
-FreeRTOS. No physical equipment is required.**
+FreeRTOS.**
 
 A semiconductor-equipment-inspired machine monitors temperature and vibration,
 commands virtual motor/cooling LEDs, detects process and software faults, and
@@ -215,58 +215,6 @@ over all normal/warning commands. Invalid/nonfinite/out-of-range values and
 future timestamps fail closed. Cooling during faults is a fictional policy;
 actual equipment may need a different safe-output design.
 
-## Diagnostics and fault injection
-
-JSON includes last-seen heartbeat times, missed-deadline counts, queue overflow
-counts, invalid samples, fault entries, ACK rejections, stack high-water marks,
-maximum control execution time and maximum sample age at output application.
-Counters are process-lifetime values, not persistent storage. Stack fields are
-bytes for the selected ESP-IDF ESP32 port. Jitter is positive wake lateness from
-the scheduled application period; counters flag >half-period lateness or a
-completion interval >1.5 periods. These are observed software measurements,
-not hardware timing guarantees or a response-time proof.
-
-Enable deliberate control stall using `idf.py menuconfig` → IndustrialRTOS →
-Enable control-task stall injection, then rebuild. Ground virtual GPIO33 with
-its switch. The diagnostics task must inhibit the LEDs while the control task
-is delayed; returning to safe operation still requires recovery and ACK.
-This is an application heartbeat supervisor, **not a hardware watchdog**.
-It cannot handle a global CPU/interrupt lockup or its own failure independently.
-
-Full acceptance steps: [validation guide](docs/validation.md).
-
-## Optional Wi-Fi / MQTT
-
-Offline serial telemetry is the default and requires no network account.
-Enable MQTT using `idf.py menuconfig` → IndustrialRTOS. Choose a broker URI and
-unique non-secret client ID and topic. Wi-Fi uses Wokwi's open `Wokwi-GUEST` network.
-
-Alternatively compile the provided MQTT + stall demo profile separately:
-
-```sh
-idf.py -B build-mqtt -D SDKCONFIG=build-mqtt/sdkconfig \
-  -D SDKCONFIG_DEFAULTS='sdkconfig.defaults;sdkconfig.mqtt.defaults' build
-```
-
-To simulate that build, change **both** paths in `wokwi.toml` to `build-mqtt/`.
-The default file continues to run the offline firmware in `build/`.
-
-Wi-Fi and MQTT use 1, 2, 4, 8, 16, then capped 30-second reconnect delays. The MQTT
-client disables automatic reconnect; the low-priority task owns retry scheduling.
-The MQTT outbox is limited to 4096 bytes. QoS 0 telemetry is queued, not sent
-synchronously by the controller. Disconnected/failed/full-outbox messages are
-dropped and counted. There are no remote control commands. Losing connectivity
-cannot change the pure controller's inputs or fault response. ESP-IDF network
-operations and their internal allocations stay outside recurring control paths.
-
-The sample URI is a public, unauthenticated demo broker. Do not send private
-information. No passwords or API tokens are required by the example. Keep actual
-credentials out of commits and generated `sdkconfig`; use an appropriate secret
-provisioning design and TLS for a real deployment. Wokwi public gateway network
-access and private/local broker access differ; a broker on localhost generally
-requires a private gateway. Broker availability and end-to-end reconnection are
-**unverified**, even when the network-enabled firmware compiles.
-[Wokwi Wi-Fi documentation](https://docs.wokwi.com/guides/esp32-wifi).
 
 ## Tests and repository structure
 
@@ -292,40 +240,3 @@ logic/serialization boundary; it does not claim a live broker was disconnected.
 The overflow test verifies the actual production counter and conservative
 interlock contracts; native tests do not execute FreeRTOS queue internals.
 GitHub Actions is supplied, but its remote execution has not been observed.
-
-## 60-second recruiter demo
-
-- **0–10 s:** Explain the virtual ESP32, two analog sensor knobs and three output
-  LEDs; show NORMAL and serial JSON.
-- **10–20 s:** Raise temperature to >=65 °C; show WARNING and cooling.
-- **20–30 s:** Raise to >=80 °C; show motor off and latched alarm. Press ACK while
-  hot; show the rejection event.
-- **30–45 s:** Restore temperature below 60 °C and vibration below 4; wait at least
-  three seconds. Show RECOVERY_READY with the motor still off, then press ACK.
-- **45–60 s:** Inject stopped sampling; show SENSOR_TIMEOUT. Explain bounded
-  queues, independent supervision, and automated native tests.
-
-If Wokwi is unavailable, use the native walkthrough and explicitly call it a
-**control-logic demo**. Do not claim it demonstrates MCU or RTOS runtime behavior.
-
-## Screenshots / video
-
-Capture these after actually running Wokwi:
-- [ ] NORMAL with motor LED enabled
-- [ ] FAULT_LATCHED with motor off and alarm on
-- [ ] RECOVERY_READY before ACK, then restart
-- [ ] 60-second video / repository demo link
-
-No simulated screenshot or fabricated timing result is included.
-
-## Resume description
-
-**IndustrialRTOS — C++, ESP-IDF, FreeRTOS, Wokwi**
-
-Developed ESP32 industrial-controller firmware with concurrent acquisition,
-control, diagnostics and telemetry tasks; implemented latched faults,
-hysteresis, debounced acknowledgment and safe recovery, with 35 native C++
-contract tests and reproducible simulation wiring.
-
-Add claims of simulator operation or measured timing only after completing the
-manual validation. MIT licensed; see [LICENSE](LICENSE).
