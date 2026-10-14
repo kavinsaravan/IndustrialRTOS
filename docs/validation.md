@@ -1,7 +1,5 @@
 # Validation checklist
 
-Record real results here; do not infer a simulator pass from a firmware build.
-
 ## Manual Wokwi acceptance
 
 1. Build with ESP-IDF v5.4.2: `idf.py set-target esp32`, `idf.py build`.
