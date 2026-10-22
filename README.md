@@ -7,7 +7,6 @@ A semiconductor-equipment-inspired machine monitors temperature and vibration,
 commands virtual motor/cooling LEDs, detects process and software faults, and
 requires safe conditions plus operator acknowledgment before restarting. The
 interesting engineering is in fault recovery, bounded concurrency, and testing.
-This is a learning project with fictional limits, not a certified safety system.
 
 ## Verification status
 
@@ -18,7 +17,6 @@ This is a learning project with fictional limits, not a certified safety system.
   part pins and ESP-IDF ADC mappings.
 - **Wokwi runtime, actual GPIO/ISR behavior and MQTT broker connectivity have not
   been verified in this environment.** No simulator token/CLI was configured.
-- No measured hardware response times or certified safety claims.
 
 ## Quick laptop demo (works without ESP-IDF or Wokwi)
 
